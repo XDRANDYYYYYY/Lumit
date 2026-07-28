@@ -439,7 +439,7 @@ exponentially over Decay seconds, so shakes hit on the beat and settle.
 | Decay | 0.05–2 s | 0.35 s |
 | Seed | seed | per-instance |
 
-The master Amplitude and Frequency drive the overall translational sway; the **Per-axis
+The master Amplitude sets the shake's overall intensity — it scales the rotation wobble andg the translational sway and Frequency drives the overall rate; the **Per-axis
 wobble** twirl (K-146) biases each axis and adds depth. X and Y amount/frequency are
 dimensionless multipliers on the master values (×1 reproduces the plain uniform shake); Z
 is the depth/scale shake — Z amount is a scale-pump per cent (the old Zoom pump, same

@@ -4636,3 +4636,38 @@ fn cpu_scanlines_darken_a_periodic_band() {
     assert_eq!(red_at(&inter, 8), 1.0, "period 2 (even) unflipped again");
     assert_eq!(red_at(&inter, 10), 0.5, "period 2 (even) unflipped again");
 }
+#[test]
+fn shake_amplitude_scales_the_rotation_wobble() {
+    let rotation_at = |amp: f64| {
+        let e = shake_at_amplitude(amp);
+        let r = resolve_stack(
+            std::slice::from_ref(&e),
+            0.4,
+            1000.0,
+            1.0,
+            &MarkerContext::NONE,
+        );
+        let Resolved::Shake { rotation_deg, .. } = r[0] else {
+            panic!("expected a Shake");
+        };
+        rotation_deg
+    };
+
+    // A non-zero wobble at this frame, or the ratio below would prove nothing.
+    let nominal = rotation_at(1.5);
+    assert!(
+        nominal.abs() > 1e-4,
+        "expected a rotating frame to test against"
+    );
+
+    // Twice the amplitude, twice the rotation wobble.
+    let louder = rotation_at(3.0);
+    assert!(
+        (louder - 2.0 * nominal).abs() < 1e-4,
+        "double the amplitude should double the rotation wobble (got {louder} vs {nominal})",
+    );
+
+    // Amplitude 0 stills the shake completely — rotation included. Before TF-28
+    // the rotation ignored amplitude, so this frame still rotated: this guard
+    // fails without the fix.
+    assert_eq!(rotation_at(0.0), 0.0, "zero amplitude leaves no rotation");

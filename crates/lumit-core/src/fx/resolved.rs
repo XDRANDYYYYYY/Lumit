@@ -1167,7 +1167,7 @@ fn resolve_one(
         "shake" => {
             let amp_pct = (e.float_at("amplitude", lt).unwrap_or(1.5) as f32).max(0.0);
             let freq = e.float_at("frequency", lt).unwrap_or(8.0).max(0.0);
-            let rot_amount = (e.float_at("rotation", lt).unwrap_or(1.0) as f32).max(0.0);
+            let rot_amount = (e.float_at("rotation", lt).unwrap_or(1.0) as f32).max(0.0) * (amp_pct / 1.5);
             // Per-axis wobble (twirl group, K-146): amount multipliers scale
             // the master Amplitude, frequency multipliers the master rate.
             // Defaults of 1 reproduce the old uniform x/y shake exactly.
